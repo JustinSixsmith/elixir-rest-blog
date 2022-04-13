@@ -262,6 +262,8 @@ Later on, we will change the `jwtSigningKey` to be something a *little* more sec
 
 ```JAVA
 
+import com.example.restblog.errors.CustomAccessDeniedHandler;
+import com.example.restblog.errors.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -284,31 +286,31 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         resources.resourceId("api");
     }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .formLogin()
-                .disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/users")
+  @Override
+  public void configure(HttpSecurity http) throws Exception {
+      http
+          .formLogin()
+              .disable()
+          .sessionManagement()
+              .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+          .and()
+              .authorizeRequests()
+              .antMatchers("/api/users")
                 .hasAnyAuthority("ADMIN", "USER")
-                .antMatchers("/api/posts")
+              .antMatchers("/api/posts")
                 .hasAnyAuthority("ADMIN", "USER")
-                .antMatchers("/swagger-ui/**", "/v3/api-docs/**")
+              .antMatchers("/swagger-ui/**", "/v3/api-docs/**")
                 .permitAll()
-                .antMatchers("/api/users/create")
+              .antMatchers("/api/users/create")
                 .permitAll()
-                .antMatchers("/**")
+              .antMatchers("/**")
                 .permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling()
+              .anyRequest().authenticated()
+          .and()
+              .exceptionHandling()
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .accessDeniedHandler(new CustomAccessDeniedHandler());
-    }
+  }
 }
 
 ```
