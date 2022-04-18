@@ -1,5 +1,6 @@
 import createView from "../createView.js";
 
+const BASE_URI = "http://localhost:8080";
 const POST_URI = "http://localhost:8080/api/posts";
 
 export default function PostIndex(props) {
@@ -12,16 +13,19 @@ export default function PostIndex(props) {
 
             <div class="container-fluid">
                 <div>
-                    ${props.posts.map(post => `<h3>${post.title}</h3><p>${post.content}</p><button id="${post.id}" class="btn btn-secondary mb-3 edit-btn">Edit Post</button>
-                        <button id="${post.id}" class="btn btn-danger mb-3 delete-btn">Delete Post</button>`).join('')}
+                    ${props.posts.map(post =>
+                            `<h3 id="title-${post.id}">${post.title}</h3>
+                             <p id="content-${post.id}">${post.content}</p>
+                             <button id="edit-btn-${post.id}" class="btn btn-secondary mb-3 edit-btn" data-id="${post.id}">Edit Post</button>
+                             <button id="delete-btn-${post.id}" class="btn btn-danger mb-3 delete-btn" data-id="${post.id}">Delete Post</button><hr>`).join('')}
                 </div>
 
                 <div id="add-post-container">
                     <form id="add-post-form">
-                        <!--                        <div class="mb-3">-->
-                        <!--                            <label for="data-id" class="form=label">Post #</label>-->
-                        <!--                            <input type="text" class="form-control" id="data-id" disabled>-->
-                        <!--                        </div>-->
+                        <div class="mb-3">
+                            <label for="data-id" class="form=label">Post:</label>
+                            <input id="post-id" type="text" class="form-control" id="data-id" disabled placeholder="0">
+                        </div>
                         <div>
                             <label for="add-post-title" class="form=label">Title</label>
                             <input type="text" class="form-control" id="add-post-title" placeholder="Enter title">
@@ -44,9 +48,9 @@ export default function PostIndex(props) {
 export function PostsEvent() {
     createAddPostListener();
     // TODO: add edit post listener function
-    createEditPostListener();
+    createEditPostListeners();
     // TODO: add delete post listener function
-    createDeletePostListener();
+    createDeletePostListeners();
 }
 
 function createAddPostListener() {
@@ -79,20 +83,76 @@ function createAddPostListener() {
 }
 
 
-function createEditPostListener(postId) {
+function createEditPostListeners() {
+    let postId;
+    let titleId;
+    let contentId;
+    let updateTitle;
+    let updateContent;
     $(".edit-btn").click(function () {
         console.log("Getting ready to edit post!");
-        const id = this.id;
-        console.log(id);
+        postId = $(this).data("id");
 
+        titleId = "#title-" + postId;
+        updateTitle = $(titleId).text();
+
+        contentId = "#content-" + postId;
+        updateContent = $(contentId).text();
+
+        $("#post-id").val(postId);
+        $("#add-post-title").val(updateTitle);
+        $("#add-post-content").val(updateContent);
     })
+
+    $("#update-post-button").click(function () {
+        let newTitle = $("#add-post-title").val();
+        let newContent = $("#add-post-content").val();
+
+        const updatedPost = {
+            id: postId,
+            title: newTitle,
+            content: newContent
+        }
+        console.log("Ready to update:");
+        console.log(updatedPost);
+
+        const request = {
+            method: "Put",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updatedPost)
+        }
+        fetch(POST_URI, request)
+            .then(res => {
+                console.log(res.status);
+                createView("/posts")
+            }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            createView("/posts");
+        });
+    });
 }
 
 
-function createDeletePostListener() {
+function createDeletePostListeners() {
     $(".delete-btn").click(function () {
         console.log("Getting ready to delete post!");
-        const id = this.id;
-        console.log(id);
-    })
+        const id = $(this).data("id");
+        console.log("Ready to delete post with ID: " + id);
+
+        const request = {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        fetch(`${BASE_URI}/${id}`, request)
+            .then(res => {
+                console.log("DELETE SUCCESS: " + res.status);
+            }).catch(error => {
+            console.log("DELETE ERROR: " + error);
+        }).finally(() => {
+            createView("/posts");
+        })
+    });
 }
