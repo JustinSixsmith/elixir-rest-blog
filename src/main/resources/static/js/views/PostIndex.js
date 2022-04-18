@@ -1,6 +1,5 @@
 import createView from "../createView.js";
 
-const BASE_URI = "http://localhost:8080";
 const POST_URI = "http://localhost:8080/api/posts";
 
 export default function PostIndex(props) {
@@ -16,7 +15,7 @@ export default function PostIndex(props) {
                     ${props.posts.map(post =>
                             `<h3 id="title-${post.id}">${post.title}</h3>
                              <p id="content-${post.id}">${post.content}</p>
-                             <button id="edit-btn-${post.id}" class="btn btn-secondary mb-3 edit-btn" data-id="${post.id}">Edit Post</button>
+                             <button id="edit-btn-${post.id}" class="btn btn-warning mb-3 edit-btn" data-id="${post.id}">Edit Post</button>
                              <button id="delete-btn-${post.id}" class="btn btn-danger mb-3 delete-btn" data-id="${post.id}">Delete Post</button><hr>`).join('')}
                 </div>
 
@@ -117,11 +116,11 @@ function createEditPostListeners() {
         console.log(updatedPost);
 
         const request = {
-            method: "Put",
+            method: "PUT",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(updatedPost)
         }
-        fetch(POST_URI, request)
+        fetch(`${POST_URI}/${postId}`, request)
             .then(res => {
                 console.log(res.status);
                 createView("/posts")
@@ -137,8 +136,7 @@ function createEditPostListeners() {
 function createDeletePostListeners() {
     $(".delete-btn").click(function () {
         console.log("Getting ready to delete post!");
-        const id = $(this).data("id");
-        console.log("Ready to delete post with ID: " + id);
+        const postId = $(this).data("id");
 
         const request = {
             method: "DELETE",
@@ -146,7 +144,7 @@ function createDeletePostListeners() {
                 'Content-Type': 'application/json',
             }
         };
-        fetch(`${BASE_URI}/${id}`, request)
+        fetch(`${POST_URI}/${postId}`, request)
             .then(res => {
                 console.log("DELETE SUCCESS: " + res.status);
             }).catch(error => {
