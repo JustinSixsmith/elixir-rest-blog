@@ -13,7 +13,6 @@ export default function User(props) {
                 <div>
                     <p>
                     <h3>${props.user.username}</h3>
-
                     <form class="form-inline">
                         <div class="form-group mb-2">
                             <label for="staticEmail2" class="sr-only">Email:</label>
@@ -33,8 +32,12 @@ export default function User(props) {
                             <input type="password" class="form-control" id="confirm-pw" placeholder="Confirm Password">
                         </div>
                         <button id="change-pw-btn" type="submit" class="btn btn-primary mb-2">Change Password</button>
-
                     </form>
+                    <div>
+                        ${props.user.posts.map(post =>
+                                `<h3 id="user-title-${post.id}">${post.title}</h3>
+                             <p id="user-content-${post.id}">${post.content}</p>`).join('')}
+                    </div>
                     </p>
                 </div>
             </div>
@@ -47,8 +50,8 @@ export function UserEvents() {
         // 1. grab data from form fields
         const userId = 1; // $("#add-post-id").val();
         let uriExtra = '/1/updatePassword';
-        // const oldPassword = $("#old-password").val()
-        const newPassword = $("#new-pw").val()
+        // const oldPassword = $("#old-pw").val();
+        const newPassword = $("#new-pw").val();
 
         // 2. assemble the request
         const request = {
