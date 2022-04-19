@@ -208,17 +208,27 @@ And implement like this:
 
 ```JAVASCRIPT
 {
-    
-   //other properties above...
-   '/posts': {
-      returnView: PostIndex,
-      state: {
-           posts: '/api/posts'
-      },
-      uri: '/posts',
-      title: 'All Posts',
-      viewEvent: PostsEvent //<-- Use PostsEvent as a callback here!
-   },
+
+    //other properties above...
+    '/posts'
+:
+    {
+        returnView: PostIndex,
+            state
+    :
+        {
+            posts: '/api/posts'
+        }
+    ,
+        uri: '/posts',
+            title
+    :
+        'All Posts',
+            viewEvent
+    :
+        PostEvents //<-- Use PostsEvent as a callback here!
+    }
+,
 
     //other properties below
 }

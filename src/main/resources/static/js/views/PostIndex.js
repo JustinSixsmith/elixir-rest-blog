@@ -44,7 +44,7 @@ export default function PostIndex(props) {
 }
 
 
-export function PostsEvent() {
+export function PostEvents() {
     createAddPostListener();
     // TODO: add edit post listener function
     createEditPostListeners();

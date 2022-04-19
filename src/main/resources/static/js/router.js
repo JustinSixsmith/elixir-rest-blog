@@ -6,8 +6,11 @@ import Loading from "./views/Loading.js";
 import Login from "./views/Login.js";
 import LoginEvent from "./auth.js";
 import Register from "./views/Register.js"
+import User from "./views/User.js";
 import {RegisterEvent} from "./views/Register.js";
-import {PostsEvent} from "./views/PostIndex.js";
+import {PostEvents} from "./views/PostIndex.js";
+import {UserEvents} from "./views/User.js";
+
 
 
 /**
@@ -37,6 +40,15 @@ export default function router(URI) {
             title: 'Register',
             viewEvent: RegisterEvent
         },
+        '/user': {
+            returnView: User,
+            state: {
+                user: '/api/users/1'
+            },
+            uri: '/user',
+            title: 'User',
+            viewEvent: UserEvents
+        },
         '/posts': {
             returnView: PostIndex,
             state: {
@@ -44,7 +56,7 @@ export default function router(URI) {
             },
             uri: '/posts',
             title: 'All Posts',
-            viewEvent: PostsEvent //<-- Use PostsEvent as a callback here!
+            viewEvent: PostEvents //<-- Use PostsEvent as a callback here!
         },
         '/about': {
             returnView: About,
