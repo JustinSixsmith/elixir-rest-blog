@@ -20,5 +20,5 @@ public class User {
     private String password;
     private LocalDate createdAt;
     private Role role;
-    private Collection<Post> posts;
+//    private Collection<Post> posts;
 }
