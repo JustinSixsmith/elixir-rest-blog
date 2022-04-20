@@ -39,8 +39,7 @@ public class PostsController {
 
     @GetMapping("{postId}")
     private Post getById(@PathVariable Long postId) {
-        Post post = postsRepository.getById(postId);
-        return post;
+        return postsRepository.getById(postId);
     }
 
     @PostMapping
