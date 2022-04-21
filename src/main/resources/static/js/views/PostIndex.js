@@ -24,7 +24,7 @@ export default function PostIndex(props) {
                     <form id="add-post-form">
                         <div class="mb-3">
                             <label for="data-id" class="form=label">Post:</label>
-                            <input id="post-id" type="text" class="form-control" id="data-id" disabled placeholder="0">
+                            <input id="post-id" type="text" class="form-control" id="data-id" value="0" disabled>
                         </div>
                         <div>
                             <label for="add-post-title" class="form=label">Title</label>

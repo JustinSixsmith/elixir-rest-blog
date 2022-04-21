@@ -34,6 +34,8 @@ public class User {
 
     @Column(nullable = false, length = 100)
     private Role role;
+
+//    @Transient
 //    private Collection<Post> posts;
 
 

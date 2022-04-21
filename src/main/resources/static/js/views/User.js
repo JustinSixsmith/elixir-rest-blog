@@ -23,20 +23,20 @@ export default function User(props) {
                             <label for="old-pw" class="sr-only">Old Password:</label>
                             <input type="password" class="form-control" id="old-pw" value="${props.user.password}"
                                    disabled>
-                            <input type="password" class="form-control" id="confirm-pw"
+                            <input type="password" class="form-control" id="confirm-old-pw"
                                    placeholder="Enter Old Password">
                         </div>
                         <div class="form-group mx-sm-3 mb-2">
                             <label for="new-pw" class="sr-only">New Password:</label>
                             <input type="password" class="form-control" id="new-pw" placeholder="Enter New Password">
-                            <input type="password" class="form-control" id="confirm-pw" placeholder="Confirm Password">
+                            <input type="password" class="form-control" id="confirm-new-pw" placeholder="Confirm Password">
                         </div>
                         <button id="change-pw-btn" type="submit" class="btn btn-primary mb-2">Change Password</button>
                     </form>
                     <div>
                         ${props.user.posts.map(post =>
-                                `<h3 id="user-title-${post.id}">${post.title}</h3>
-                             <p id="user-content-${post.id}">${post.content}</p>`).join('')}
+                                `<h3 id="title-${post.id}">${post.title}</h3>
+                             <p id="content-${post.id}">${post.content}</p>`).join('')}
                     </div>
                     </p>
                 </div>
