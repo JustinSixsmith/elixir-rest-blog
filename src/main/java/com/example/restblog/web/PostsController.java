@@ -1,24 +1,30 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Post;
-import com.example.restblog.data.PostsRepository;
-import com.example.restblog.data.User;
+import com.example.restblog.data.*;
+import com.example.restblog.services.EmailService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/posts", headers = "Accept=application/json")
 public class PostsController {
 
-    private PostsRepository postsRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final EmailService emailService;
 
-    public PostsController(PostsRepository postsRepository) {
-        this.postsRepository = postsRepository;
+    public PostsController(PostRepository postsRepository, UserRepository userRepository, CategoryRepository categoryRepository, EmailService emailService) {
+        this.postRepository = postsRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.emailService = emailService;
     }
+
 
 //    private static final Post POST1 = new Post(1L, "Post 1", "Blah", null);
 //    private static final Post POST2 = new Post(2L, "Post 2", "Blah blah", null);
@@ -34,34 +40,40 @@ public class PostsController {
 //        posts.add(new Post(1L, "Post 1", "Blah blah blah", USER1));
 //        posts.add(new Post(2L, "Post 2", "Blah blah blah blah", USER2));
 //        posts.add(new Post(3L, "Post 3", "Blah blah blah blah blah", USER1));
-        return postsRepository.findAll();
+        return postRepository.findAll();
     }
 
     @GetMapping("{postId}")
-    private Post getById(@PathVariable Long postId) {
-        return postsRepository.getById(postId);
+    private Optional<Post> getById(@PathVariable Long postId) {
+        return postRepository.findById(postId);
     }
 
     @PostMapping
     private void createPost(@RequestBody Post newPost) {
-        Post postToAdd = new Post(newPost.getTitle(), newPost.getContent());
-        postsRepository.save(postToAdd);
+        newPost.setAuthor(userRepository.getById(1L));
+        List<Category> categories = new ArrayList<>();
+        categories.add(categoryRepository.findCategoryByName("music"));
+        categories.add(categoryRepository.findCategoryByName("food"));
+        newPost.setCategories(categories);
+        postRepository.save(newPost);
+        emailService.prepareAndSend(newPost, newPost.getTitle(), newPost.getContent());
         System.out.println("Post created");
     }
 
     @PutMapping("{postId}")
     private void updatePost(@PathVariable Long postId, @RequestBody Post updatedPost) {
-        Post postToUpdate = postsRepository.getById(postId);
+        Post postToUpdate = postRepository.getById(postId);
         postToUpdate.setContent(updatedPost.getContent());
         postToUpdate.setTitle(updatedPost.getTitle());
-        postsRepository.save(postToUpdate);
+        postRepository.save(postToUpdate);
         System.out.println("Updating post number: " + postId + " with: " + updatedPost);
     }
 
     @DeleteMapping("{postId}")
     private void deletePost(@PathVariable Long postId) {
-        Post postToDelete = postsRepository.getById(postId);
-        postsRepository.delete(postToDelete);
+        Post postToDelete = postRepository.getById(postId);
+        postRepository.delete(postToDelete);
         System.out.println("Deleting post with ID: " + postId);
     }
+
 }

@@ -1,23 +1,21 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Post;
-import com.example.restblog.data.PostsRepository;
 import com.example.restblog.data.User;
 import com.example.restblog.data.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UsersController {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UsersController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -43,15 +41,16 @@ public class UsersController {
     }
 
     @GetMapping("{userId}")
-    private User getById(@PathVariable Long userId) {
+    private Optional<User> getById(@PathVariable Long userId) {
 //        return new User(userId, "Bob Smith", "bobsemail@rr.com", "password129", null, User.Role.ADMIN, Arrays.asList(POST7, POST8));
-        return userRepository.getById(userId);
+        return userRepository.findById(userId);
     }
 
     @PostMapping
     private void createUser(@RequestBody User newUser) {
-        User user = new User(newUser.getUsername(), newUser.getEmail(), newUser.getPassword(), newUser.getCreatedAt(), newUser.getRole());
-        userRepository.save(user);
+        newUser.setCreatedAt(LocalDate.now());
+        newUser.setRole(User.Role.USER);
+        userRepository.save(newUser);
         System.out.println("User created");
     }
 

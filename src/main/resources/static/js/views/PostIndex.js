@@ -4,6 +4,7 @@ const POST_URI = "http://localhost:8080/api/posts";
 
 export default function PostIndex(props) {
     //language=HTML
+    console.log(props);
     return `
         <header>
             <h1>Posts Page</h1>
@@ -15,7 +16,9 @@ export default function PostIndex(props) {
                     ${props.posts.map(post =>
                             `<h3 id="title-${post.id}">${post.title}</h3>
                              <p id="content-${post.id}">${post.content}</p>
-                             
+                             <p>Author: ${post.author.username}</p>
+                              ${post.categories.map(category =>
+                                    `<p>${category.name}</p>`).join('')}
                              <button id="edit-btn-${post.id}" class="btn btn-warning mb-3 edit-btn" data-id="${post.id}">Edit Post</button>
                              <button id="delete-btn-${post.id}" class="btn btn-danger mb-3 delete-btn" data-id="${post.id}">Delete Post</button><hr>`).join('')}
                 </div>
