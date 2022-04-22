@@ -2,6 +2,7 @@ package com.example.restblog.web;
 
 import com.example.restblog.data.User;
 import com.example.restblog.data.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,9 +17,11 @@ import java.util.Optional;
 public class UsersController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsersController(UserRepository userRepository) {
+    public UsersController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 //    private static final Post POST1 = new Post(1L, "Post 1", "Blah", null);
@@ -50,6 +53,9 @@ public class UsersController {
     private void createUser(@RequestBody User newUser) {
         newUser.setCreatedAt(LocalDate.now());
         newUser.setRole(User.Role.USER);
+        String encrypedPassword = newUser.getPassword();
+        encrypedPassword = passwordEncoder.encode(encrypedPassword);
+        newUser.setPassword(encrypedPassword);
         userRepository.save(newUser);
         System.out.println("User created");
     }
