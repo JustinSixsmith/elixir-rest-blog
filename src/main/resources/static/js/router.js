@@ -10,7 +10,8 @@ import User from "./views/User.js";
 import {RegisterEvent} from "./views/Register.js";
 import {PostEvents} from "./views/PostIndex.js";
 import {UserEvents} from "./views/User.js";
-
+import Logout from "./views/Logout.js";
+import {LogoutEvents} from "./views/Logout.js";
 
 
 /**
@@ -25,6 +26,13 @@ export default function router(URI) {
             state: {},
             uri: '/',
             title: 'Home',
+        },
+        '/logout': {
+            returnView: Logout,
+            state: {},
+            uri: '/',
+            title: 'Logout',
+            viewEvent: LogoutEvents
         },
         '/login': {
             returnView: Login,
@@ -43,9 +51,9 @@ export default function router(URI) {
         '/user': {
             returnView: User,
             state: {
-                user: '/api/users/1'
+                user: '/api/users/me'
             },
-            uri: '/user',
+            uri: '/users',
             title: 'User',
             viewEvent: UserEvents
         },

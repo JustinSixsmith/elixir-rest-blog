@@ -3,6 +3,7 @@ package com.example.restblog.web;
 import com.example.restblog.data.User;
 import com.example.restblog.data.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,20 +37,24 @@ public class UsersController {
 
     @GetMapping
     private List<User> getAll() {
-//        ArrayList<User> users = new ArrayList<>();
-//        users.add(new User( 1L, "User 1", "email 1", "1111", null, User.Role.ADMIN, Arrays.asList(POST1, POST2)));
-//        users.add(new User(2L, "User 2", "email 2", "2222", null, User.Role.ADMIN, Arrays.asList(POST3, POST4)));
-//        users.add(new User(3L, "User 3", "email 3", "3333", null, User.Role.ADMIN, Arrays.asList(POST5, POST6)));
         return userRepository.findAll();
     }
 
     @GetMapping("{userId}")
     private Optional<User> getById(@PathVariable Long userId) {
-//        return new User(userId, "Bob Smith", "bobsemail@rr.com", "password129", null, User.Role.ADMIN, Arrays.asList(POST7, POST8));
         return userRepository.findById(userId);
     }
 
-    @PostMapping
+    @GetMapping("me")
+    private User getMyInfo(OAuth2Authentication auth) {
+        // TODO: return the currently logged in user info
+        String email = auth.getName();
+        return userRepository.findByEmail(email);
+    }
+
+
+
+    @PostMapping("create")
     private void createUser(@RequestBody User newUser) {
         newUser.setCreatedAt(LocalDate.now());
         newUser.setRole(User.Role.USER);
