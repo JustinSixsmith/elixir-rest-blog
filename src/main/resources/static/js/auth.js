@@ -65,3 +65,7 @@ function setTokens(responseData) {
         console.log("Refresh token set")
     }
 }
+
+export function isLoggedIn() {
+    return !!localStorage.getItem('access_token');
+}

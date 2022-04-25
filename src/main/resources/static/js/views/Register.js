@@ -1,5 +1,5 @@
 import CreateView from "../createView.js"
-import {getHeaders} from "../auth.js";
+import {getHeaders, isLoggedIn} from "../auth.js";
 
 export default function Register(props) {
     return `
@@ -27,6 +27,7 @@ export default function Register(props) {
 }
 
 export function RegisterEvent(){
+    console.log("Am I logged in?: " + isLoggedIn());
     $("#register-btn").click(function(){
 
         let newUser = {
