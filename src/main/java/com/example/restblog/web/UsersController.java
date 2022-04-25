@@ -53,8 +53,8 @@ public class UsersController {
     private void createUser(@RequestBody User newUser) {
         newUser.setCreatedAt(LocalDate.now());
         newUser.setRole(User.Role.USER);
-        String encrypedPassword = newUser.getPassword();
-        encrypedPassword = passwordEncoder.encode(encrypedPassword);
+        String plainTextPassword = newUser.getPassword();
+        String encrypedPassword = passwordEncoder.encode(plainTextPassword);
         newUser.setPassword(encrypedPassword);
         userRepository.save(newUser);
         System.out.println("User created");

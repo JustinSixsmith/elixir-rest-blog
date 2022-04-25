@@ -1,4 +1,5 @@
 import CreateView from "../createView.js"
+import {getHeaders} from "../auth.js";
 
 const BASE_URI = "http://localhost:8080/api/user";
 
@@ -55,6 +56,7 @@ export function UserEvents() {
 
         // 2. assemble the request
         const request = {
+            headers: getHeaders(),
             method: "PUT"
         }
 
