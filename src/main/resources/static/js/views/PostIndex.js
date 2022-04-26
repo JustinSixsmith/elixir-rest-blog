@@ -27,11 +27,11 @@ export default function PostIndex(props) {
                 <div id="add-post-container">
                     <form id="add-post-form">
                         <div class="mb-3">
-                            <label for="data-id" class="form=label">Post:</label>
+                            <label for="data-id" class="form-label">Post:</label>
                             <input id="post-id" type="text" class="form-control" id="data-id" value="0" disabled>
                         </div>
                         <div>
-                            <label for="add-post-title" class="form=label">Title</label>
+                            <label for="add-post-title" class="form-label">Title</label>
                             <input type="text" class="form-control" id="add-post-title" placeholder="Enter title">
                         </div>
                         <div class="mb-3">
@@ -59,9 +59,28 @@ export function PostEvents() {
     clearFields();
 }
 
+
+function validatePost() {
+    const title = $("#add-post-title").val();
+    if(title.trim().length === 0) {
+        console.log("Field must not be blank.")
+        return false;
+    }
+    return true;
+}
+
 function createAddPostListener() {
     console.log("adding a post listener");
     $("#add-post-button").click(function () {
+
+        if(!validatePost()) {
+            $("#add-post-title").addClass("border border-danger");
+            return;
+        } else {
+            $("#add-post-title").removeClass();
+        }
+
+
         const title = $("#add-post-title").val();
         const content = $("#add-post-content").val();
         const newPost = {
@@ -160,10 +179,13 @@ function createDeletePostListeners() {
     });
 }
 
- function clearFields() {
+function clearFields() {
     $("#clear-button").click(function () {
+        const titleBox = $("#add-post-title");
+        titleBox.removeClass();
+        titleBox.addClass("form-control");
         $("#post-id").val("0");
-        $("#add-post-title").val("");
+        titleBox.val("");
         $("#add-post-content").val("");
     })
- }
+}
