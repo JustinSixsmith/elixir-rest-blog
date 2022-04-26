@@ -39,6 +39,7 @@ export default function PostIndex(props) {
                             <textarea class="form-control" id="add-post-content" rows="3"
                                       placeholder="Enter content"></textarea>
                         </div>
+                        <button id="clear-button" class="btn btn-secondary mb-3">Clear</button>
                         <button id="add-post-button" class="btn btn-success mb-3">Add Post</button>
                         <button id="update-post-button" class="btn btn-primary mb-3">Save Post</button>
                     </form>
@@ -55,6 +56,7 @@ export function PostEvents() {
     createEditPostListeners();
     // TODO: add delete post listener function
     createDeletePostListeners();
+    clearFields();
 }
 
 function createAddPostListener() {
@@ -157,3 +159,11 @@ function createDeletePostListeners() {
         })
     });
 }
+
+ function clearFields() {
+    $("#clear-button").click(function () {
+        $("#post-id").val("0");
+        $("#add-post-title").val("");
+        $("#add-post-content").val("");
+    })
+ }
