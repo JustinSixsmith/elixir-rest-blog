@@ -40,8 +40,8 @@ export default function PostIndex(props) {
                                       placeholder="Enter content"></textarea>
                         </div>
                         <button id="clear-button" class="btn btn-secondary mb-3">Clear</button>
-                        <button id="add-post-button" class="btn btn-success mb-3">Add Post</button>
-                        <button id="update-post-button" class="btn btn-primary mb-3">Save Post</button>
+                        <button id="add-post-button" class="btn btn-success mb-3">Save as New</button>
+                        <button id="update-post-button" class="btn btn-primary mb-3">Update Post</button>
                     </form>
                 </div>
             </div>

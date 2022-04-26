@@ -12,6 +12,7 @@ import {PostEvents} from "./views/PostIndex.js";
 import {UserEvents} from "./views/User.js";
 import Logout from "./views/Logout.js";
 import {LogoutEvents} from "./views/Logout.js";
+import {HomeEvents} from "./views/Home.js";
 
 
 /**
@@ -26,6 +27,7 @@ export default function router(URI) {
             state: {},
             uri: '/',
             title: 'Home',
+            viewEvent: HomeEvents
         },
         '/logout': {
             returnView: Logout,

@@ -9,5 +9,4 @@ export function LogoutEvents() {
     console.log("Calling logout events");
     window.localStorage.clear();
     createView("/login");
-
 }
