@@ -2,6 +2,7 @@ package com.example.restblog.web;
 
 import com.example.restblog.data.*;
 import com.example.restblog.services.EmailService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,31 +27,20 @@ public class PostsController {
         this.emailService = emailService;
     }
 
-
-//    private static final Post POST1 = new Post(1L, "Post 1", "Blah", null);
-//    private static final Post POST2 = new Post(2L, "Post 2", "Blah blah", null);
-//    private static final Post POST3 = new Post(3L, "Post 3", "Blah blah blah", null);
-
-//    private static final User USER1 = new User(1L, "User 1", "user1@bob.com", "1111", null, User.Role.USER, null);
-//    private static final User USER2 = new User(2L, "User 2", "user2@bob.com", "2222", null, User.Role.USER, null);
-//    private static final User USER3 = new User(3L, "User 3", "user3@bob.com", "3333", null, User.Role.USER, null);
-
     @GetMapping
-    private List<Post> getAll() {
-//        ArrayList<Post> posts = new ArrayList<>();
-//        posts.add(new Post(1L, "Post 1", "Blah blah blah", USER1));
-//        posts.add(new Post(2L, "Post 2", "Blah blah blah blah", USER2));
-//        posts.add(new Post(3L, "Post 3", "Blah blah blah blah blah", USER1));
+    public List<Post> getAll() {
         return postRepository.findAll();
     }
 
     @GetMapping("{postId}")
-    private Optional<Post> getById(@PathVariable Long postId) {
+    @PreAuthorize("hasAuthority('USER') || hasAuthority('ADMIN')")
+    public Optional<Post> getById(@PathVariable Long postId) {
         return postRepository.findById(postId);
     }
 
     @PostMapping
-    private void createPost(@RequestBody Post newPost, OAuth2Authentication auth) {
+    @PreAuthorize("hasAuthority('USER') || hasAuthority('ADMIN')")
+    public void createPost(@RequestBody Post newPost, OAuth2Authentication auth) {
 //        newPost.setAuthor(userRepository.getById(1L));
 
         String email = auth.getName(); // yes, the email is found under "getName()"
@@ -67,7 +57,8 @@ public class PostsController {
     }
 
     @PutMapping("{postId}")
-    private void updatePost(@PathVariable Long postId, @RequestBody Post updatedPost) {
+    @PreAuthorize("hasAuthority('USER') || hasAuthority('ADMIN')")
+    public void updatePost(@PathVariable Long postId, @RequestBody Post updatedPost) {
         Post postToUpdate = postRepository.getById(postId);
         postToUpdate.setContent(updatedPost.getContent());
         postToUpdate.setTitle(updatedPost.getTitle());
@@ -76,7 +67,8 @@ public class PostsController {
     }
 
     @DeleteMapping("{postId}")
-    private void deletePost(@PathVariable Long postId) {
+    @PreAuthorize("hasAuthority('USER') || hasAuthority('ADMIN')")
+    public void deletePost(@PathVariable Long postId) {
         Post postToDelete = postRepository.getById(postId);
         postRepository.delete(postToDelete);
         System.out.println("Deleting post with ID: " + postId);

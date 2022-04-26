@@ -1,4 +1,5 @@
 import {showNotification} from "../messaging.js";
+import {getUserRole, isLoggedIn} from "../auth.js";
 
 export default function Home(props) {
     console.log("The frontend did it. HER FAULT");
@@ -18,5 +19,10 @@ export default function Home(props) {
 
 
 export function HomeEvents(){
-    showNotification("Welcome to this blog website!", "info");
+    if (isLoggedIn()) {
+        const userRole = getUserRole();
+        showNotification("Logged in as: " + userRole, "info");
+    } else {
+        showNotification("Please LOGIN or REGISTER", "secondary");
+    }
 }

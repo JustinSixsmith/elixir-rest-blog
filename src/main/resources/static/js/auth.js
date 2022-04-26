@@ -33,7 +33,7 @@ export default function addLoginEvent() {
             }, request).then((data) => {
             // console.log(data);
             if (data.route.error) {
-                showNotification("Failed to login: " + data.route.error, "danger");
+                showNotification("Failed to login: " + data.route.error, "warning");
                 return;
             }
             setTokens(data);
@@ -77,3 +77,14 @@ export function isLoggedIn() {
     return !!localStorage.getItem('access_token');
 }
 
+export function getUserRole() {
+    const accessToken = localStorage.getItem("access_token");
+    if(!accessToken) {
+        return false;
+    }
+    const parts = accessToken.split('.');
+    const payload = parts[1];
+    const decodedPayload = atob(payload);
+    const payloadObject = JSON.parse(decodedPayload);
+    return payloadObject.authorities[0];
+}
