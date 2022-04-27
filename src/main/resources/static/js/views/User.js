@@ -49,8 +49,10 @@ export default function User(props) {
 export function UserEvents() {
     $("#change-pw-btn").click(function() {
         // 1. grab data from form fields
-        const userId = 1; // $("#add-post-id").val();
-        let uriExtra = '/1/updatePassword';
+        const userId = props.user.id;
+        console.log(userId);
+        // $("#add-post-id").val();
+        let uriExtra = userId + '/updatePassword';
         // const oldPassword = $("#old-pw").val();
         const newPassword = $("#new-pw").val();
 

@@ -1,5 +1,5 @@
 import createView from "../createView.js";
-import {getHeaders} from "../auth.js";
+import {getHeaders, isLoggedIn} from "../auth.js";
 
 const POST_URI = "http://localhost:8080/api/posts";
 
@@ -58,6 +58,13 @@ export function PostEvents() {
     createDeletePostListeners();
     clearButton();
     resetBorders();
+
+    const loggedIn = isLoggedIn();
+    if (!loggedIn) {
+        $(".btn").addClass("invisible");
+        $("#add-post-container").addClass("invisible");
+    }
+
 }
 
 
