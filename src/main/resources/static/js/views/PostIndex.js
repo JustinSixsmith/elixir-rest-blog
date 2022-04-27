@@ -56,13 +56,24 @@ export function PostEvents() {
     createEditPostListeners();
     // TODO: add delete post listener function
     createDeletePostListeners();
-    clearFields();
+    clearButton();
+    resetBorders();
 }
 
 
-function validatePost() {
+function validateTitle() {
     const title = $("#add-post-title").val();
     if(title.trim().length === 0) {
+        console.log("Field must not be blank.")
+        return false;
+    }
+    return true;
+}
+
+
+function validateContent() {
+    const content = $("#add-post-content").val();
+    if(content.trim().length === 0) {
         console.log("Field must not be blank.")
         return false;
     }
@@ -72,17 +83,22 @@ function validatePost() {
 function createAddPostListener() {
     console.log("adding a post listener");
     $("#add-post-button").click(function () {
+        const titleBox = $("#add-post-title");
+        const contentBox = $("#add-post-content");
 
-        if(!validatePost()) {
-            $("#add-post-title").addClass("border border-danger");
+        if(!validateTitle() || !validateContent()) {
+            if (!validateTitle()) {
+                titleBox.addClass("border border-danger");
+            }
+            if (!validateContent()) {
+                contentBox.addClass("border border-danger");
+            }
             return;
-        } else {
-            $("#add-post-title").removeClass();
         }
 
 
-        const title = $("#add-post-title").val();
-        const content = $("#add-post-content").val();
+        const title = titleBox.val();
+        const content = contentBox.val();
         const newPost = {
             title,
             content
@@ -179,13 +195,35 @@ function createDeletePostListeners() {
     });
 }
 
-function clearFields() {
+function clearButton() {
     $("#clear-button").click(function () {
-        const titleBox = $("#add-post-title");
-        titleBox.removeClass();
-        titleBox.addClass("form-control");
-        $("#post-id").val("0");
-        titleBox.val("");
-        $("#add-post-content").val("");
+        clearFields();
     })
 }
+
+function clearFields() {
+    const titleBox = $("#add-post-title");
+    const contentBox = $("#add-post-content");
+    titleBox.removeClass();
+    contentBox.removeClass();
+    titleBox.addClass("form-control");
+    contentBox.addClass("form-control");
+    $("#post-id").val("0");
+    titleBox.val("");
+    contentBox.val("");
+    contentBox.val("");
+}
+
+function resetBorders() {
+    const titleBox = $("#add-post-title");
+    const contentBox = $("#add-post-content");
+    titleBox.on("keyup", function() {
+        titleBox.removeClass();
+        titleBox.addClass("form-control");
+    });
+    contentBox.on("keyup", function () {
+        contentBox.removeClass();
+        contentBox.addClass("form-control");
+    });
+}
+
