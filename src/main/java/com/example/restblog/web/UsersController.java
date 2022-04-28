@@ -25,16 +25,6 @@ public class UsersController {
         this.passwordEncoder = passwordEncoder;
     }
 
-//    private static final Post POST1 = new Post(1L, "Post 1", "Blah", null);
-//    private static final Post POST2 = new Post(2L, "Post 2", "Blah blah", null);
-//    private static final Post POST3 = new Post(3L, "Post 3", "Blah blah blah", null);
-//    private static final Post POST4 = new Post(4L, "Post 4", "Blah blah blah blah", null);
-//    private static final Post POST5 = new Post(5L, "Post 5", "Blah blah blah blah blah", null);
-//    private static final Post POST6 = new Post(6L, "Post 6", "Blah blah blah blah blah blah", null);
-//    private static final Post POST7 = new Post(7L, "Post 7", "Blah blah blah blah blah blah", null);
-//    private static final Post POST8 = new Post(8L, "Post 8", "Blah blah blah blah blah blah", null);
-//    private static final Post POST9 = new Post(9L, "Post 9", "Blah blah blah blah blah blah", null);
-
     @GetMapping
     private List<User> getAll() {
         return userRepository.findAll();
@@ -51,8 +41,6 @@ public class UsersController {
         String email = auth.getName();
         return userRepository.findByEmail(email);
     }
-
-
 
     @PostMapping("create")
     private void createUser(@RequestBody User newUser) {
@@ -84,21 +72,13 @@ public class UsersController {
         System.out.println("Deleting user with ID: " + userId);
     }
 
-//    @GetMapping("/username")
-//    private User getByUsername(@RequestParam String username) {
-//        return new User(989, username, "jodiesmail@myspace.com", "password989", null, User.Role.USER, List.of(POST8));
-//    }
-
-//    @GetMapping("/email")
-//    private User getByEmail(@RequestParam String email) {
-//        return new User(223, "Wendy Mathis", email, "password9921", null, User.Role.USER, List.of(POST9));
-//    }
-
     @PutMapping("{userId}/updatePassword")
     private void updateUserPassword(@PathVariable Long userId, @RequestParam(required = false) String oldPassword,
         @Valid @Size(min = 3) @RequestParam String newPassword) {
         User userRequestingUpdate = userRepository.getById(userId);
-        userRequestingUpdate.setPassword(newPassword);
+        String plainTextPassword = userRequestingUpdate.getPassword();
+        String encrypedPassword = passwordEncoder.encode(plainTextPassword);
+        userRequestingUpdate.setPassword(encrypedPassword);
         userRepository.save(userRequestingUpdate);
         System.out.println("Ready to change password for user ID: " + userId + " from " + oldPassword + " to " + newPassword);
     }

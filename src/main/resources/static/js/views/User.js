@@ -1,7 +1,7 @@
 import CreateView from "../createView.js"
 import {getHeaders} from "../auth.js";
 
-const BASE_URI = "http://localhost:8080/api/user";
+const BASE_URI = "http://localhost:8080/api/users/";
 
 export default function User(props) {
     //language=HTML
@@ -32,7 +32,7 @@ export default function User(props) {
                             <input type="password" class="form-control" id="new-pw" placeholder="Enter New Password">
                             <input type="password" class="form-control" id="confirm-new-pw" placeholder="Confirm Password">
                         </div>
-                        <button id="change-pw-btn" type="submit" class="btn btn-primary mb-2">Change Password</button>
+                        <button id="change-pw-btn" type="submit" class="btn btn-primary mb-2" data-id="${props.user.id}">Change Password</button>
                     </form>
                     <div>
                         ${props.user.posts.map(post =>
@@ -49,7 +49,7 @@ export default function User(props) {
 export function UserEvents() {
     $("#change-pw-btn").click(function() {
         // 1. grab data from form fields
-        const userId = props.user.id;
+        const userId = $(this).data("id");
         console.log(userId);
         // $("#add-post-id").val();
         let uriExtra = userId + '/updatePassword';
