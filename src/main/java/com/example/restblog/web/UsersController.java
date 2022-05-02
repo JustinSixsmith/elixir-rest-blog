@@ -47,8 +47,8 @@ public class UsersController {
         newUser.setCreatedAt(LocalDate.now());
         newUser.setRole(User.Role.USER);
         String plainTextPassword = newUser.getPassword();
-        String encrypedPassword = passwordEncoder.encode(plainTextPassword);
-        newUser.setPassword(encrypedPassword);
+        String encryptedPassword = passwordEncoder.encode(plainTextPassword);
+        newUser.setPassword(encryptedPassword);
         userRepository.save(newUser);
         System.out.println("User created");
     }
@@ -77,8 +77,8 @@ public class UsersController {
         @Valid @Size(min = 3) @RequestParam String newPassword) {
         User userRequestingUpdate = userRepository.getById(userId);
         String plainTextPassword = userRequestingUpdate.getPassword();
-        String encrypedPassword = passwordEncoder.encode(plainTextPassword);
-        userRequestingUpdate.setPassword(encrypedPassword);
+        String encryptedPassword = passwordEncoder.encode(plainTextPassword);
+        userRequestingUpdate.setPassword(encryptedPassword);
         userRepository.save(userRequestingUpdate);
         System.out.println("Ready to change password for user ID: " + userId + " from " + oldPassword + " to " + newPassword);
     }
