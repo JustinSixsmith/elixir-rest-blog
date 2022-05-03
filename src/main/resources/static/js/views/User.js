@@ -71,6 +71,5 @@ export function UserEvents() {
         }).finally(() => {
             createView("/users");
         });
-
     });
 }
