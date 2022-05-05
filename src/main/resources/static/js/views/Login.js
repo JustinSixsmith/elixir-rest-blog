@@ -17,7 +17,6 @@ export default function Login(props) {
 </form>
 </body>
 </html>`;
-
 }
 
 
