@@ -18,5 +18,3 @@ export default function Login(props) {
 </body>
 </html>`;
 }
-
-
